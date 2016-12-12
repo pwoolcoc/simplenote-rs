@@ -1,4 +1,4 @@
-= Simplenote API
+= Simplenote API - link:https://docs.rs/simplenote[Documentation]
 :toc:
 
 == Usage
@@ -21,22 +21,22 @@ extern crate simplenote;
 == API
 
 ----
-pub fn new(username: &str, password: &str) -> Result<Simplenote, simplenote::Error>;
+pub fn new<T: Display, U: Display>(username: T, password: U) -> Result<Simplenote, simplenote::Error>;
 
 pub fn notes(&self) -> Result<Vec<Note>, simplenote::Error>;
 
 pub fn notes_filtered(&self, filters: Vec<Filters>) -> Result<Vec<Note>, simplenote::Error>;
 
-pub fn get_note(note_id: String) -> Result<Note, simplenote::Error>;
+pub fn get_note(&self, note_id: &str) -> Result<Note, simplenote::Error>;
 
-pub fn get_note_version(note_id: String, version: u32) -> Result<Note, simplenote::Error>;
+pub fn get_note_version<I: Into<Option<u32>>>(&self, note_id: &str, version: I) -> Result<Note, simplenote::Error>;
 
-pub fn add_note(note: Note) -> Result<(), simplenote::Error>;
+pub fn add_note<I: Into<Note>>(&self, note: I) -> Result<Note, simplenote::Error>;
 
-pub fn update(note: Note) -> Result<(), simplenote::Error>;
+pub fn update_note(&self, note: &mut Note) -> Result<(), simplenote::Error>;
 
-pub fn trash(note_id: String) -> Result<(), simplenote::Error>;
+pub fn trash_note(&self, note_id: &str) -> Result<Note, simplenote::Error>;
 
-pub fn delete(note_id: String) -> Result<(), simplenote::Error>;
+pub fn delete_note(&self, note_id: &str) -> Result<(), simplenote::Error>;
 ----
 
