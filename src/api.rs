@@ -13,7 +13,6 @@ use base64;
 const AUTH_URL: &'static str = "https://app.simplenote.com/api/login";
 const DATA_URL: &'static str = "https://app.simplenote.com/api2/data";
 const INDEX_URL: &'static str = "https://app.simplenote.com/api2/index?";
-// const NOTE_LIST_LENGTH: u8 = 1;
 const NOTE_LIST_LENGTH: u8 = 100;
 
 /// API Client. All communications with the API go through this struct
@@ -156,15 +155,22 @@ impl Simplenote {
         self.auth()
     }
 
-    fn auth(&self) -> Result<String> {
+    pub fn auth(&self) -> Result<String> {
         let auth_params = format!("email={}&password={}", self.username, self.password);
+        debug!("Using auth params: {}", auth_params);
         let encoded = base64::encode(auth_params.as_bytes());
+        debug!("base64-encoded auth params: {}", encoded);
         let mut res = self.client.post(AUTH_URL)
                              .body(encoded)
                              .header(ContentType::form_url_encoded())
                              .send()
                              .chain_err(|| "Could not log in to simplenote.com")?;
+        if ! res.status().is_success() {
+            debug!("Response was `{:?}`", &res);
+            return Err(format!("Authentication was not successful. Status was {}", &res.status()).into());
+        }
         let mut token = String::new();
+        debug!("Token is {}", token);
         let _  = res.read_to_string(&mut token).chain_err(|| "Could not get token from response")?;
         *self.token.borrow_mut() = Some(token.clone());
         Ok(token)

@@ -1,5 +1,8 @@
 //! Simplenote API
 #![feature(proc_macro)]
+
+#[macro_use] extern crate log;
+extern crate url;
 extern crate reqwest;
 extern crate base64;
 #[macro_use] extern crate serde_derive;

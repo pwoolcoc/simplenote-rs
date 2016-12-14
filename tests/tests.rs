@@ -17,11 +17,11 @@ fn delete_note_helper(client: &Simplenote, n: &Note) {
 }
 
 #[test]
-fn test_login() {
+fn login() {
     let (em, pw) = get_creds();
     let client = Simplenote::new(em, pw);
-
-    assert!(client.is_ok());
+    let client = client.expect("Could not create client");
+    let _token = client.auth().expect("did not successfully authenticate");
 }
 
 #[test]
@@ -59,11 +59,16 @@ fn update_note() {
     let (em, pw) = get_creds();
     let content = "Test Note\n\nThis is a new note";
     let client = Simplenote::new(em, pw).expect("Could not get simplenote client");
-    let note = client.add_note(content).expect("Colud not add new note from string");
+    let note = client.add_note(content).expect("Could not add new note from string");
     let original_key = {
         let key = note.key().expect("New note doesn't have a key?");
         key.to_string()
     };
-    let mut new_note = note.content("Another Test Note\n\nThis has some new content"); 
-    client.update_note(&mut new_note);
+    let mut new_note = note.content("Another Test Note\n\nThis has some new content");
+    client.update_note(&mut new_note).expect("Unable to successfully update new note");
+    let new_key = {
+        let key = new_note.key().expect("New note doesn't have a key?");
+        key.to_string()
+    };
+    assert_eq!(original_key, new_key);
 }

@@ -1,20 +1,20 @@
 [package]
 authors = ["Paul Woolcock <paul@woolcock.us>"]
-name = "simplenote"
-version = "0.1.0"
-license ="MIT/Apache-2.0"
-repository = "https://github.com/pwoolcoc/simplenote-rs.git"
-homepage = "https://github.com/pwoolcoc/simplenote-rs.git"
+description = "API bindings for the Simplenote service\n"
 documentation = "https://docs.rs/simplenote"
-description = """
-API bindings for the Simplenote service
-"""
+homepage = "https://github.com/pwoolcoc/simplenote-rs.git"
+license = "MIT/Apache-2.0"
+name = "simplenote"
+repository = "https://github.com/pwoolcoc/simplenote-rs.git"
+version = "0.1.0"
 
 [dependencies]
 base64 = "0.2.1"
 error-chain = "0.7.1"
+# hyper = "0.9.14"
 reqwest = "0.2.0"
+log = "0.3.6"
 serde = "0.8.19"
 serde_derive = "0.8.19"
 serde_json = "0.8.4"
-
+url = "1.2.3"
